@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/react-dom": "^18.2.19",
     "bootstrap": "^5.2.0",
     "http-proxy-middleware": "^2.0.6",
     "jquery": "^3.6.0",
@@ -30,6 +32,9 @@
     "workbox-streams": "^6.5.4"
   },
   "devDependencies": {
+    "@types/node": "^20.11.19",
+    "@types/react": "^18.2.55",
+    "@types/typescript": "^2.0.0",
     "ajv": "^8.11.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.22.0",
