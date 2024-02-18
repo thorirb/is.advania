@@ -1,8 +1,19 @@
+using weather_app.DataAccess.Vedur;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllersWithViews();
+builder.Services.AddTransient<IVedurDA, VedurDA>();
+builder.Services.AddHttpClient("vedur", client =>
+{
+    string baseUrl = builder.Configuration.GetSection(VedurDAOptions.Vedur).GetValue<string>("BaseUrl");
+    if (String.IsNullOrEmpty(baseUrl)) {
+        // TODO: Handle with custom config exception
+        throw new Exception("Unable to start the application, missing");
+    }
+	client.BaseAddress = new Uri(baseUrl);
+});
 
 var app = builder.Build();
 
