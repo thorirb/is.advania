@@ -52,10 +52,10 @@ public class Station {
 public class Observations { 
 
     [XmlElement(ElementName="station")] 
-    public List<Station> Stations { get; set; } 
+    public List<Station>? Stations { get; set; } 
 
     [XmlElement(ElementName="error")] 
-    public string Error { get; set; } 
+    public string? Error { get; set; } 
 }
 
 [XmlRoot(ElementName="forecast")]
@@ -83,10 +83,10 @@ public class Forecast {
 public class Forecasts { 
 
     [XmlElement(ElementName="station")] 
-    public List<Station> Stations { get; set; } 
+    public List<Station>? Stations { get; set; } 
 
     [XmlElement(ElementName="error")] 
-    public string Error { get; set; } 
+    public string? Error { get; set; } 
 }
 
 // using System.Xml.Serialization;
@@ -122,9 +122,9 @@ public class Text {
 public class Texts { 
 
     [XmlElement(ElementName="text")] 
-    public List<Text> Text { get; set; } 
+    public List<Text>? Text { get; set; } 
 
     [XmlElement(ElementName="error")] 
-    public string Error { get; set; } 
+    public string? Error { get; set; } 
 }
 

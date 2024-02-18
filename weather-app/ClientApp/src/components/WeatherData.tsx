@@ -31,51 +31,45 @@ function renderForecastsTable(forecasts: any) {
 }
 
 async function populateWeatherData(stationId: string, fn: (stateObject: any) => void) {
-  const response = await fetch(`weatherforecast?StationId=${stationId}`);
-  const data = await response.json();
-  fn({ forecasts: data, loading: false })
+  fn({ forecasts: [], loading: true, isEmpty: false })
+  let isEmpty = false;
+  let data = [];
+  if (stationId) {
+    const response = await fetch(`weatherforecast?StationId=${stationId}`);
+    data = await response.json();
+    isEmpty = !data || data.length === 0;
+  }
+  fn({ forecasts: data, loading: false, isEmpty })
 }
 
 
 
 export default function WeatherData() {
-  const [data, setData] = useState({ forecasts: [], loading: true });
+  const resetState = { forecasts: [], loading: false, isEmpty: false };
+  const [data, setData] = useState(resetState);
   const [stationId, setStationId] = useState('');
 
   let contents = data.loading
       ? <p><em>Loading...</em></p>
       : renderForecastsTable(data.forecasts);
 
-  useEffect(() => {populateWeatherData(stationId, setData);}, [])
+  useEffect(() => {populateWeatherData(stationId, setData);}, []);
 
-  return (<>
-    <style>{`.styled {
-      border: 0;
-      line-height: 2.5;
-      padding: 0 20px;
-      margin-left: 20px;
-      font-size: 1rem;
-      text-align: center;
-      color: #fff;
-      text-shadow: 1px 1px 1px #000;
-      border-radius: 10px;
-      background-color: rgb(220 0 0 / 100%);
-      background-image: linear-gradient( to top left, rgb(0 0 0 / 20%), rgb(0 0 0 / 20%) 30%, rgb(0 0 0 / 0%) );
-      // box-shadow: inset 2px 2px 3px rgb(255 255 255 / 60%), inset -2px -2px 3px rgb(0 0 0 / 60%);
-    }
-    .flex {
-      display: flex;
-    }`}</style>
+  function onStationChange(stationId: string) {
+    setData(resetState);
+    setStationId(stationId);
+  }
+  return (
     <div>
       <h1 id="tableLabel">VeðurSpá</h1>
       <p>Hér er hægt að sækja veðurspá frá hinum ýmsu veðurstöðum á landinu</p>
       <div className='flex'>
-        <Stations onStationChange={setStationId} />
-        <input type='button' className="styled" value='Sækja veðurspá' disabled={stationId === ''} onClick={() => populateWeatherData(stationId, setData)} />
+        <Stations onStationChange={onStationChange} />
+        <input type='button' className="btn-primary" value='Sækja veðurspá' disabled={stationId === ''} onClick={() => populateWeatherData(stationId, setData)} />
       </div>
       {contents}
+      {data.isEmpty && (<p><em>Engin gögn fyrir valda stöð</em></p>)}
     </div>
-    </>
   );
 }
 
@@ -97,21 +91,23 @@ function Stations(props: StationsProps): JSX.Element {
     }
   }, [searchText]);
   // https://reactstrap.github.io/?path=/docs/components-dropdown--dropdown
-  return (<Dropdown isOpen={dropdownOpen} toggle={toggle}>
-    <DropdownToggle caret size="lg">
+  return (<Dropdown isOpen={dropdownOpen} toggle={toggle} className="dropdown-custom">
+    <DropdownToggle caret className='dropdown-custom'>
       {dropDownLabel}
     </DropdownToggle>
     <DropdownMenu container="body">
-      <DropdownItem key="search" header>
+      <DropdownItem key="search" header className='dropdown-search'>
         <label>Leit: </label><input type="text" placeholder='Veðurstöð' value={searchText} onChange={(evt) => setSearchText(evt.target.value)} />
       </DropdownItem>
       <DropdownItem key="divider" divider >
       </DropdownItem>
-      {filteredStationList.map(s => {
-        return (<DropdownItem key={s.id} onClick={() => {setDropDownLabel(s.name); props.onStationChange(s.id)}}>
-          {s.name}
-        </DropdownItem>);
-      })}
+      <div className="dropdown-contain">
+        {filteredStationList.map(s => {
+          return (<DropdownItem key={s.id} onClick={() => {setDropDownLabel(s.name); props.onStationChange(s.id)}}>
+            {s.name}
+          </DropdownItem>);
+        })}
+      </div>
     </DropdownMenu>
   </Dropdown>
   );

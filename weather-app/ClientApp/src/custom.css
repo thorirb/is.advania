@@ -15,4 +15,40 @@ code {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
+  margin-left: 20px;
+  font-size: 1rem;
+  border-radius: 7px;
+}
+
+.styled {
+  border: 0;
+  line-height: 2.5;
+  padding: 0 20px;
+  margin-left: 20px;
+  font-size: 1rem;
+  text-align: center;
+  color: #fff;
+  text-shadow: 1px 1px 1px #000;
+  border-radius: 10px;
+  background-color: rgb(220 0 0 / 100%);
+  background-image: linear-gradient( to top left, rgb(0 0 0 / 20%), rgb(0 0 0 / 20%) 30%, rgb(0 0 0 / 0%) );
+}
+
+.flex {
+  display: flex;
+  width: 30%;
+  align-content: space-between;
+}
+
+.dropdown-custom {
+  width: 250px;
+}
+
+.dropdown-contain {
+  overflow: auto;
+  overscroll-behavior: contain;
+  height: 40vh;
+}
+.dropdown-fixed-width {
+  width: 50%;
 }
