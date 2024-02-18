@@ -14,7 +14,7 @@ Make sure you have the following things installed
 * The webpage should open momentarily. Try it out.
 
 ### Run the published app
-The published app is found in folder publish in the root. To run the app in command line (windows) run `dotnet weather-app`. On mac os/linux terminal just run the app `./weather-app`. 
+The published app is found in folder publish in the root. Navigate into the folder. To run the app in command line (windows) run `dotnet weather-app`. On mac os/linux terminal just run the app `./weather-app`. 
 The app should print the url `http://localhost:5000/`, open it in any browser to test the app.
 
 # Assumptions
