@@ -1,15 +1,10 @@
-import FetchData from "./components/FetchData";
-import Home from "./components/Home";
+import WeatherData from "./components/WeatherData";
 
 const AppRoutes = [
   {
     index: true,
-    element: (<Home />)
+    element: (<WeatherData />)
   },
-  {
-    path: '/fetch-data',
-    element: (<FetchData />)
-  }
 ];
 
 export default AppRoutes;

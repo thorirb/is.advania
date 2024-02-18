@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
+using Microsoft.AspNetCore.Mvc;
+using weather_app.Converters;
+using weather_app.DataAccess.Vedur;
+using weather_app.Models;
 
 namespace weather_app.Controllers;
 
@@ -6,27 +10,30 @@ namespace weather_app.Controllers;
 [Route("[controller]")]
 public class WeatherForecastController : ControllerBase
 {
-    private static readonly string[] Summaries = new[]
-    {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
     private readonly ILogger<WeatherForecastController> _logger;
+    private readonly IVedurDA _vedurDA;
 
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
+    public WeatherForecastController(ILogger<WeatherForecastController> logger, IVedurDA vedurDA)
     {
         _logger = logger;
+        _vedurDA = vedurDA;
     }
 
     [HttpGet]
-    public IEnumerable<WeatherForecast> Get()
+    public async Task<IEnumerable<WeatherForecast>> Get([FromQuery] int StationId = 1)
     {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        // Might move the conversion logic to a layer further down but given the simplicity of the app
+        // we will not add the extra layer. 
+        try
         {
-            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        })
-        .ToArray();
+            _logger.LogInformation("Got a request! Params: {0}", StationId);
+            var result = await _vedurDA.GetWeatherForeCast(StationId);
+            return ConvertVedurToWeatherForecast.Convert(result);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Unhandled Exception");
+            throw new Exception("Internal Server Error");
+        }
     }
 }
